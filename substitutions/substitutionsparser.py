@@ -1,6 +1,6 @@
 import requests
 import xml.etree.ElementTree as ET
-import substitutions as sub
+from substitutions import substitutions as sub
 import datetime
 import os
 
