@@ -1,8 +1,19 @@
 from flask import Flask, Response
+from substitutions.substitutions import Substitutions
+from substitutions.substitutionsdates import SubstitutionsDates
+from substitutions.substitutionsparser import SubstitutionsParser
 
 app = Flask(__name__)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return Response("<h1>Flask</h1><p>You visited: /%s</p>" % (path), mimetype="text/html")
+@app.route("/<grade>")
+def catch_all(grade):
+    substitutions = Substitutions()
+    dates = SubstitutionsDates()
+    parser = SubstitutionsParser()
+
+    parser.load_metadata()
+
+    date = dates.download_dates()[0]
+    substitution = substitutions.get_substitutions_for_grade(date, grade)
+    
+    return parser.get_full_string(substitution, date)
