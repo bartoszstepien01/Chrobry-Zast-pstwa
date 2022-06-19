@@ -11,7 +11,7 @@ def catch_all(grade):
     dates = SubstitutionsDates()
     parser = SubstitutionsParser()
 
-    parser.load_metadata()
+    parser.update_metadata()
 
     date = dates.download_dates()[0]
     substitution = substitutions.get_substitutions_for_grade(date, grade)
