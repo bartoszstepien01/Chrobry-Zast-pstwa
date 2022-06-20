@@ -83,6 +83,9 @@ class SubstitutionsParser(object):
     def replace_names(self, substitutions: list) -> list:
         for i in range(len(substitutions)):
             for short, name in SubstitutionsParser.SUBJECTS_METADATA.items():
+                if short == "WF chł": name = "WF chłopcy"
+                elif short == "WF dz": name = "WF dziewczyny"
+                
                 substitutions[i] = substitutions[i].replace(short, name)
         return substitutions
 

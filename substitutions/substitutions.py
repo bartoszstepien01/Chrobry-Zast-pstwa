@@ -65,7 +65,9 @@ class Substitutions(object):
             return None
         cols = [col.text.strip() for col in cols]
         cols = cols[:-1]
-        if cols[-1] == "":
-            cols[-1] = "Odwołane"
+        if cols[-1] == "" or cols[-2] == "":
+            cols[-2] = "Odwołane"
         cols = [col for col in cols if col]
+        if "->" in cols[-1]:
+            cols[-2] += " / " + cols[-1]
         return cols
