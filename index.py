@@ -37,7 +37,11 @@ class Date(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
 
+print("dupa")
+
 db.create_all()
+
+print("dupadupa")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
