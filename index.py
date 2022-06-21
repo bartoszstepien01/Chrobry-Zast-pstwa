@@ -78,3 +78,19 @@ def index():
 
           
     return "Message Processed"
+
+@app.route("/send")
+def send():
+    date = dates.download_dates()[0]
+    temp = substitutions.get_substitutions(date)
+    subs = {}
+
+    for grade in GRADES:
+        subs[grade] = substitutions.get_substitutions_for_grade(date, grade, temp)
+        subs[grade] = parser.get_full_string(subs[grade], date)
+    
+    users = User.query.all()
+    for user in users:
+        bot.send_text_message(user.id, subs[user.grade])
+    
+    return "Success"
