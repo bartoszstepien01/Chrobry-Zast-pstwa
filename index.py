@@ -1,7 +1,6 @@
 from flask import Flask, request
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import func
 
 from substitutions.substitutions import Substitutions
 from substitutions.substitutionsdates import SubstitutionsDates

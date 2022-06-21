@@ -2,7 +2,5 @@ Flask==2.1.2
 bs4 == 0.0.1
 requests == 2.28.0
 pymessenger==0.0.7.0
-SQLAlchemy==1.4.37
 Flask-SQLAlchemy==2.5.1
-#mysqlclient==2.1.0
-psycopg2-binary==2.9.3
+PyMySQL==1.0.2
