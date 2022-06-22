@@ -93,7 +93,7 @@ def check():
 
     last_date = Date.query.first()
 
-    if date <= last_date.date and last_date.current_substitution == temp2: return "Nihil novi"
+    if date <= last_date.date and last_date.current_substitutions == temp2: return "Nihil novi"
 
     subs = {}
 
