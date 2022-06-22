@@ -35,6 +35,7 @@ class User(db.Model):
     grade = db.Column(db.String(5))
 
 class Date(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
     current_substitutions = db.Column(db.JSON)
 
@@ -83,12 +84,17 @@ def index():
 @app.route("/check")
 def check():
     date = dates.download_dates()[0]
+    temp = substitutions.get_substitutions(date)
+
+    temp2 = copy.deepcopy(temp)
+    for key in temp2:
+        for i, sub in enumerate(temp2[key]):
+            temp2[key][i] = sub.__dict__
 
     last_date = Date.query.first()
 
-    if date < last_date.date: return "Nihil novi"
+    if date <= last_date.date and last_date.current_substitution == temp2: return "Nihil novi"
 
-    temp = substitutions.get_substitutions(date)
     subs = {}
 
     for grade in GRADES:
@@ -100,11 +106,6 @@ def check():
         bot.send_text_message(user.id, subs[user.grade])
 
     last_date.date = date
-    temp2 = copy.deepcopy(temp)
-    for key in temp2:
-        for i, sub in enumerate(temp2[key]):
-            temp2[key][i] = sub.__dict__
-    
     last_date.current_substitutions = temp2
 
     db.session.add(last_date)
