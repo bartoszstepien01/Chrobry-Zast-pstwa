@@ -83,6 +83,8 @@ def index():
 
 @app.route("/check")
 def check():
+    if request.headers.get("Token") != os.getenv("CHECK_TOKEN"): return "Invalid verification token"
+
     date = dates.download_dates()[0]
     temp = substitutions.get_substitutions(date)
 
@@ -93,13 +95,15 @@ def check():
 
     last_date = Date.query.first()
 
-    if date <= last_date.date and last_date.current_substitutions == temp2: return "Nihil novi"
+    if last_date.date == date and last_date.current_substitutions == temp2: return "Nihil novi"
 
+    update = date == last_date.date
     subs = {}
 
     for grade in GRADES:
         subs[grade] = substitutions.get_substitutions_for_grade(date, grade, temp)
         subs[grade] = parser.get_full_string(subs[grade], date)
+        if update: subs[grade] = subs[grade].replace("Zastępstwa", "Aktualizacja zastępstw")
     
     users = User.query.all()
     for user in users:
