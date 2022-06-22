@@ -9,6 +9,7 @@ from substitutions.substitutionsparser import SubstitutionsParser
 from pymessenger.bot import Bot
 
 import os
+import copy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
@@ -34,8 +35,8 @@ class User(db.Model):
     grade = db.Column(db.String(5))
 
 class Date(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
+    current_substitutions = db.Column(db.JSON)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -79,9 +80,14 @@ def index():
           
     return "Message Processed"
 
-@app.route("/send")
-def send():
+@app.route("/check")
+def check():
     date = dates.download_dates()[0]
+
+    last_date = Date.query.first()
+
+    if date < last_date.date: return "Nihil novi"
+
     temp = substitutions.get_substitutions(date)
     subs = {}
 
@@ -92,5 +98,16 @@ def send():
     users = User.query.all()
     for user in users:
         bot.send_text_message(user.id, subs[user.grade])
+
+    last_date.date = date
+    temp2 = copy.deepcopy(temp)
+    for key in temp2:
+        for i, sub in enumerate(temp2[key]):
+            temp2[key][i] = sub.__dict__
+    
+    last_date.current_substitutions = temp2
+
+    db.session.add(last_date)
+    db.session.commit()
     
     return "Success"
