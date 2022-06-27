@@ -13,13 +13,15 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>3452559014808284</td>
-				<td>3bp</td>
-				<td>
-					<a class="waves-effect waves-light btn red"><i class="material-icons left">delete</i>Usuń</a>
-				</td>
-			</tr>
+			{% for user in users %}
+				<tr>
+					<td>{{ user.id }}</td>
+					<td>{{ user.grade }}</td>
+					<td>
+						<a class="waves-effect waves-light btn red"><i class="material-icons left">delete</i>Usuń</a>
+					</td>
+				</tr>
+			{% endfor %}
 		</tbody>
   </table>
 {% endblock %}

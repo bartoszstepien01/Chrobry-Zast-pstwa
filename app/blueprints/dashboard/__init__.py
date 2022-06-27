@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from .auth import requires_auth
+from ...database.models.User import User
 
 dashboard = Blueprint("dashboard", __name__, template_folder="templates", static_folder="static")
 
@@ -10,7 +11,8 @@ def index():
 @dashboard.route("/users")
 @requires_auth
 def users():
-	return render_template("users.html")
+	users = User.query.all()
+	return render_template("users.html", users=users)
 
 @dashboard.route("/message")
 @requires_auth
