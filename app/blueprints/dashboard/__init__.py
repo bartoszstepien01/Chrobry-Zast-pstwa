@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
 from .auth import requires_auth
+from ..bot import messenger_bot
+from ...database import db
 from ...database.models.User import User
 
 dashboard = Blueprint("dashboard", __name__, template_folder="templates", static_folder="static")
@@ -33,3 +35,17 @@ def cron():
 @requires_auth
 def stats():
     return render_template("stats.html")
+
+@dashboard.route("/delete_user")
+def delete_user():
+	id = request.args.get("id")
+	if not id: return redirect(url_for("dashboard.users"))
+
+	user = User.query.filter_by(id=id).first()
+	if not user: return redirect(url_for("dashboard.users"))
+
+	db.session.delete(user)
+	db.session.commit()
+	messenger_bot.send_text_message(id, "Od teraz nie będziesz już otrzymywać powiadomień. Aby włączyć je ponownie, wpisz nazwę swojej klasy.")
+
+	return redirect(url_for("dashboard.users"))

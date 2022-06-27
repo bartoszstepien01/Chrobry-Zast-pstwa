@@ -18,7 +18,10 @@
 					<td>{{ user.id }}</td>
 					<td>{{ user.grade }}</td>
 					<td>
-						<a class="waves-effect waves-light btn red"><i class="material-icons left">delete</i>Usuń</a>
+						<form action="delete_user">
+							<input type="hidden" name="id" value="{{ user.id }}">
+							<button type="submit" class="waves-effect waves-light btn red"><i class="material-icons left">delete</i>Usuń</button>
+						</form>
 					</td>
 				</tr>
 			{% endfor %}
