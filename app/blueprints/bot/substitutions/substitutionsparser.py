@@ -1,9 +1,8 @@
 import requests
 import xml.etree.ElementTree as ET
-from substitutions import substitutions as sub
+from . import substitutions as sub
 import datetime
 import os
-
 
 class SubstitutionsParser(object):
     HOURS = os.getenv("HOURS").split(",")

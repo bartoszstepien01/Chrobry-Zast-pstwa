@@ -3,9 +3,9 @@ from pymessenger.bot import Bot
 from os import getenv
 from copy import deepcopy
 
-#from .substitutions.substitutions import Substitutions
-#from .substitutions.substitutionsdates import SubstitutionsDates
-#from .substitutions.substitutionsparser import SubstitutionsParser
+from .substitutions.substitutions import Substitutions
+from .substitutions.substitutionsdates import SubstitutionsDates
+from .substitutions.substitutionsparser import SubstitutionsParser
 from ...database import db
 from ...database.models.User import User
 from ...database.models.Date import Date
