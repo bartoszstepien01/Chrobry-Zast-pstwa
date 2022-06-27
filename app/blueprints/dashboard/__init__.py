@@ -27,7 +27,7 @@ def message():
 		message = request.form.get("message")
 		if not grades or not message: return render_template("message.html", grades=getenv("GRADES").split(","))
 
-		users = User.query.filter_by(User.grade.in_(grades)).all()
+		users = User.query.filter(User.grade.in_(grades)).all()
 		for user in users:
 			messenger_bot.send_text_message(user.id, message)
 
