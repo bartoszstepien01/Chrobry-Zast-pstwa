@@ -17,7 +17,7 @@ def users():
 	users = User.query.all()
 	return render_template("users.html", users=users)
 
-@dashboard.route("/message", method=["GET", "POST"])
+@dashboard.route("/message", methods=["GET", "POST"])
 @requires_auth
 def message():
 	if request.method == 'GET':
