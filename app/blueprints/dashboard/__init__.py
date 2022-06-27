@@ -25,6 +25,7 @@ def message():
 	else:
 		grades = request.args.getlist("grade")
 		message = request.args.get("message")
+		print(grades, message)
 		if not grades or not message: return render_template("message.html", grades=getenv("GRADES").split(","))
 
 		users = User.query.filter_by(grade.in_(grades)).all()
