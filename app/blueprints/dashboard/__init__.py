@@ -23,8 +23,8 @@ def message():
 	if request.method == 'GET':
 		return render_template("message.html", grades=getenv("GRADES").split(","))
 	else:
-		grades = request.args.getlist("grade")
-		message = request.args.get("message")
+		grades = request.form.getlist("grade")
+		message = request.form.get("message")
 		print(grades, message)
 		if not grades or not message: return render_template("message.html", grades=getenv("GRADES").split(","))
 
