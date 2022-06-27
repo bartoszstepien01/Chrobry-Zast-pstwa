@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for
 from .auth import requires_auth
 
-dashboard = Blueprint("dashboard", __name__, template_folder="templates", static_folder="static")
+dashboard = Blueprint("dashboard", __name__, template_folder="templates")
 
 @dashboard.route("/")
 def index():
-	return redirect(url_for("users"))
+	return redirect(url_for("dashboard.users"))
 
 @dashboard.route("/users")
 @requires_auth
