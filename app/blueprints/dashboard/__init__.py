@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request
+from os import getenv
 from .auth import requires_auth
 from ..bot import messenger_bot
 from ...database import db
@@ -16,10 +17,23 @@ def users():
 	users = User.query.all()
 	return render_template("users.html", users=users)
 
-@dashboard.route("/message")
+@dashboard.route("/message", method=["GET"])
 @requires_auth
-def message():
-    return render_template("message.html")
+def message_get():
+    return render_template("message.html", grades=getenv("GRADES").split(","))
+
+@dashboard.route("/message", method=["POST"])
+@requires_auth
+def message_post():
+	grades = request.args.getlist("grade")
+	message = request.args.get("message")
+	if not grades or not message: return render_template("message.html", grades=getenv("GRADES").split(","))
+
+	users = User.query.filter_by(grade.in_(grades)).all()
+	for user in users:
+		messenger_bot.send_text_message(user.id, message)
+
+	return render_template("message.html", grades=getenv("GRADES").split(","))
 
 @dashboard.route("/data")
 @requires_auth

@@ -8,9 +8,9 @@
 	<form method="post">
 		<div class="input-field">
 			<select multiple name="grade">
-				<option value="1a">1a</option>
-				<option value="1b">1b</option>
-				<option value="1c">1c</option>
+				{% for grade in grades %}
+					<option value="{{ grade }}">{{ grade }}</option>
+				{% endfor %}
 			</select>
 			<label>Klasa</label>
 		</div>
