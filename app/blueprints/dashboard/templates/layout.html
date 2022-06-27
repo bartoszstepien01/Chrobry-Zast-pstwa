@@ -1,0 +1,113 @@
+{% set title %}{% block title %}{% endblock %}{% endset %}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<title>{{ title }}</title>
+</head>
+<body>
+	<header>
+		<nav class="top-nav" style="background-color: #9e6a52;">
+			<div class="nav-wrapper">
+				<ul id="nav-mobile" class="left">
+					<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+				</ul>
+				<div class="col s12">
+					<a class="breadcrumb">Panel administracyjny</a>
+					<a class="breadcrumb">{{ title }}</a>
+				</div>
+			</div>
+		</nav>
+		<ul id="slide-out" class="sidenav sidenav-fixed">
+			<li><div class="user-view">
+			<div class="background">
+				<img src="static/building.jpg" style="max-width: 100%; filter: brightness(0.6);">
+			</div>
+			<a><img class="circle" src="static/logo.png"></a>
+			<a<span class="white-text name">Chrobry Zastępstwa</span></a>
+			<a><span class="white-text email">Panel administracyjny</span></a>
+			</div></li>
+			<li {% if url_for(request.endpoint) == "/users" %}class="active"{% endif %}><a class="waves-effect" href="users"><i class="material-icons">people</i>Użytkownicy</a></li>
+			<li {% if url_for(request.endpoint) == "/message" %}class="active"{% endif %}><a class="waves-effect" href="message"><i class="material-icons">message</i>Wysyłanie wiadomości</a></li>
+			<li {% if url_for(request.endpoint) == "/data" %}class="active"{% endif %}><a class="waves-effect" href="data"><i class="material-icons">folder</i>Źródła danych</a></li>
+			<li {% if url_for(request.endpoint) == "/cron" %}class="active"{% endif %}><a class="waves-effect" href="cron"><i class="material-icons">schedule</i>Pobieranie zastępstw</a></li>
+			<li {% if url_for(request.endpoint) == "/stats" %}class="active"{% endif %}><a class="waves-effect" href="stats"><i class="material-icons">show_chart</i>Statystyki</a></li>
+		</ul>
+	</header>
+
+	<main>
+		<div style="padding-left: 20px; padding-right: 20px;">
+			{% block content %}
+    		{% endblock %}
+		</div>
+	</main>
+
+	<style>
+		header, main, footer {
+			padding-left: 300px;
+		}
+
+		.nav-wrapper {
+			padding-left: 20px;
+		}
+	  
+		@media only screen and (max-width : 992px) {
+			header, main, footer {
+			  	padding-left: 0;
+			}
+
+			.nav-wrapper {
+				padding-left: 0;
+			}
+		}
+	</style>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			var elems = document.querySelectorAll('.sidenav');
+			var instances = M.Sidenav.init(elems);
+
+			elems = document.querySelectorAll('select');
+    		instances = M.FormSelect.init(elems);
+
+			elems = document.querySelectorAll('.grades');
+    		instances = M.Chips.init(elems, {
+				placeholder: "Klasy",
+				secondaryPlaceholder: "\0",
+				data: [{
+					tag: '1a'
+				},
+				{
+					tag: '1b'
+				},
+				{
+					tag: '1c'
+				},
+				]
+			});
+
+			elems = document.querySelectorAll('.hours');
+    		instances = M.Chips.init(elems, {
+				placeholder: "Godziny",
+				secondaryPlaceholder: "\0",
+				data: [{
+					tag: '7:10-7:55'
+				},
+				{
+					tag: '8:00-8:45'
+				},
+				{
+					tag: '8:55-9:40'
+				},
+				]
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Wysyłanie wiadomości{% endblock %}
+
+{% block content %}
+	<h3>Wysyłanie wiadomości</h3>
+	<br>
+	<form method="post">
+		<div class="input-field">
+			<select multiple name="grade">
+				<option value="1a">1a</option>
+				<option value="1b">1b</option>
+				<option value="1c">1c</option>
+			</select>
+			<label>Klasa</label>
+		</div>
+		<div class="input-field">
+			<textarea id="textarea1" class="materialize-textarea" name="message"></textarea>
+			<label for="textarea1">Wiadomość</label>
+		</div>
+		<button type="submit" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Wyślij</button>
+	</form>
+{% endblock %}
