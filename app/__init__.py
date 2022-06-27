@@ -1,5 +1,5 @@
 from flask import Flask
-from .blueprints import bot
+from .blueprints.bot import bot
 from .database import db
 from os import getenv
 
