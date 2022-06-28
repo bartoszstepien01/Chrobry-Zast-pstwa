@@ -11,7 +11,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
-db.create_all()
+with app.app_context():
+	db.create_all()
 
 app.register_blueprint(bot, url_prefix="/bot")
 app.register_blueprint(dashboard, url_prefix="/dashboard")
