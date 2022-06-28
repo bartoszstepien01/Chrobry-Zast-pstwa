@@ -18,9 +18,9 @@
 			<label for="meta-url">Adres URL metadanych</label>
 		</div>
 		<div class="chips grades"></div>
-		<input type="hidden" name="grades" id="grades" value="{{ grades.join(",") }}">
+		<input type="hidden" name="grades" id="grades" value="{{ ",".join(grades) }}">
 		<div class="chips hours"></div>
-		<input type="hidden" name="hours" id="hours" value="{{ hours.join(",") }}">
+		<input type="hidden" name="hours" id="hours" value="{{ ",".join(hours) }}">
 		<button type="submit" class="waves-effect waves-light btn"><i class="material-icons left">check</i>Zastosuj</button>
 	</form>
 
