@@ -57,7 +57,7 @@ def data():
 		grades = request.form.get("grades")
 		hours = request.form.get("hours")
 
-		if not all(substitutions_url, dates_url, metadata_url, grades, hours): return render_template("data.html", substitutions_url=substitutions_url, dates_url=dates_url, metadata_url=metadata_url, grades=grades.split(","), hours=hours.split(","))
+		if not all([substitutions_url, dates_url, metadata_url, grades, hours]): return render_template("data.html", substitutions_url=substitutions_url, dates_url=dates_url, metadata_url=metadata_url, grades=grades.split(","), hours=hours.split(","))
 
 		Setting.query.filter_by(name="substitutions_url").first().value = substitutions_url
 		Setting.query.filter_by(name="dates_url").first().value = dates_url
