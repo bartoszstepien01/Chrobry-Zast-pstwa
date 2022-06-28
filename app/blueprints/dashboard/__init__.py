@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request
-from requests import get
+from requests import get, patch
 from os import getenv
 from .auth import requires_auth
 from ..bot import messenger_bot
@@ -25,7 +25,7 @@ def users():
 @dashboard.route("/message", methods=["GET", "POST"])
 @requires_auth
 def message():
-	if request.method == 'GET':
+	if request.method == "GET":
 		return render_template("message.html", grades=GRADES)
 	else:
 		grades = request.form.getlist("grade")
@@ -43,12 +43,18 @@ def message():
 def data():
     return render_template("data.html")
 
-@dashboard.route("/cron")
+@dashboard.route("/cron", methods=["GET", "POST"])
 @requires_auth
 def cron():
-	response = get("https://api.cron-job.org/jobs/" + CRONJOB_JOB_ID, headers={ "Authorization": "Bearer " + CRONJOB_API_KEY })
-	job_data = response.json()
-	return render_template("cron.html", enabled=job_data["jobDetails"]["enabled"], interval=job_data["jobDetails"]["schedule"]["minutes"][1])
+	if request.method == "GET":
+		response = get("https://api.cron-job.org/jobs/" + CRONJOB_JOB_ID, headers={ "Authorization": "Bearer " + CRONJOB_API_KEY })
+		job_data = response.json()
+		return render_template("cron.html", enabled=job_data["jobDetails"]["enabled"], interval=job_data["jobDetails"]["schedule"]["minutes"][1])
+	
+	enabled = request.form.has("enabled")
+	interval = int(request.form.get("interval"))
+	patch("https://api.cron-job.org/jobs/" + CRONJOB_JOB_ID, headers={ "Authorization": "Bearer " + CRONJOB_API_KEY }, json={"job":{"enabled": enabled, "schedule": {"minutes": [i for i in range(0, 60, interval)]}}})
+	return render_template("cron.html", enabled=enabled, interval=interval)
 
 @dashboard.route("/stats")
 @requires_auth
