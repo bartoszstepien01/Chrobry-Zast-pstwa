@@ -8,14 +8,14 @@
 		<div class="switch">
 			<label>
 				Wyłączone
-				<input type="checkbox" checked name="enabled">
+				<input type="checkbox" {% if enabled %}checked{% endif %} name="enabled">
 				<span class="lever"></span>
 				Włączone
 			</label>
 		</div>
 		<br>
 		<div class="input-field">
-			<input id="interval" type="number" name="interval" value="5">
+			<input id="interval" type="number" name="interval" value="{{ interval }}">
 			<label for="interval">Interwał (w minutach)</label>
 		</div>
 		<button type="submit" class="waves-effect waves-light btn"><i class="material-icons left">check</i>Zastosuj</button>
