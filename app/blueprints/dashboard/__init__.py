@@ -51,7 +51,7 @@ def cron():
 		job_data = response.json()
 		return render_template("cron.html", enabled=job_data["jobDetails"]["enabled"], interval=job_data["jobDetails"]["schedule"]["minutes"][1])
 	
-	enabled = request.form.has("enabled")
+	enabled = request.form.get("enabled") is not None
 	interval = int(request.form.get("interval"))
 	patch("https://api.cron-job.org/jobs/" + CRONJOB_JOB_ID, headers={ "Authorization": "Bearer " + CRONJOB_API_KEY }, json={"job":{"enabled": enabled, "schedule": {"minutes": [i for i in range(0, 60, interval)]}}})
 	return render_template("cron.html", enabled=enabled, interval=interval)
