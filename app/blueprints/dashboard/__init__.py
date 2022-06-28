@@ -85,7 +85,17 @@ def cron():
 @dashboard.route("/stats")
 @requires_auth
 def stats():
-    return render_template("stats.html")
+	grades = Setting.query.filter_by(name="grades").first().value.split(",")
+	users = User.query.all()
+
+	users_count = { grade: 0 for grade in grades }
+	users_count["all"] = 0
+
+	for user in users:
+		users_count[user.grade] += 1
+		users_count["all"] += 1
+
+	return render_template("stats.html", grades=grades, users_count=users_count)
 
 @dashboard.route("/delete_user")
 def delete_user():
