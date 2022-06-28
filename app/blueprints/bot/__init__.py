@@ -10,6 +10,7 @@ from ...database import db
 from ...database.models.User import User
 from ...database.models.Date import Date
 from ...database.models.Setting import Setting
+from ...database.models.Message import Message
 
 ACCESS_TOKEN = getenv("ACCESS_TOKEN")
 VERIFY_TOKEN = getenv("VERIFY_TOKEN")
@@ -37,6 +38,7 @@ def webhook():
 			messaging = event["messaging"]
 			for message in messaging:
 				if message.get("message"):
+					Message.query.filter_by(name="received").first().value += 1
 					recipient_id = message["sender"]["id"]
 					text = message["message"].get("text").lower()
 
@@ -47,22 +49,29 @@ def webhook():
 					if text in GRADES:
 						if user:
 							user.grade = text
+							Message.query.filter_by(name="sent").first().value += 1
 							messenger_bot.send_text_message(recipient_id, "Od teraz będziesz otrzymywać powiadomienia dla klasy {0} 😀. Możesz je wyłączyć wpisując frazę STOP.".format(text))
 						else:
 							user = User(id=recipient_id, grade=text)
+							Message.query.filter_by(name="sent").first().value += 1
 							messenger_bot.send_text_message(recipient_id, "Od teraz będziesz otrzymywać powiadomienia za każdym razem, gdy pojawią się nowe zastępstwa dla klasy {0} 😀. Możesz je wyłączyć wpisując frazę STOP.".format(text))
                             
 						db.session.add(user)
 						db.session.commit()
 					elif text == "stop" and user:
+						Message.query.filter_by(name="sent").first().value += 1
 						db.session.delete(user)
 						db.session.commit()
 						messenger_bot.send_text_message(recipient_id, "Od teraz nie będziesz już otrzymywać powiadomień. Aby włączyć je ponownie, wpisz nazwę swojej klasy.")
 					else:
+						Message.query.filter_by(name="sent").first().value += 1
+						db.session.commit()
 						messenger_bot.send_text_message(recipient_id, "Przykro mi, ale nie istnieje klasa o podanej nazwie 😢")
 				elif message.get("postback"):
 					recipient_id = message["sender"]["id"]
 					messenger_bot.send_text_message(recipient_id, "👋 Witaj!\nAby zacząć otrzymywać powiadomienia, wpisz nazwę swojej klasy")
+					Message.query.filter_by(name="sent").first().value += 1
+					db.session.commit()
     
 	return "Message Processed"
 
@@ -101,6 +110,7 @@ def check():
 	users = User.query.all()
 	for user in users:
 		messenger_bot.send_text_message(user.id, subs[user.grade])
+		Message.query.filter_by(name="sent").first().value += 1
 
 	last_date.date = date
 	last_date.current_substitutions = temp2

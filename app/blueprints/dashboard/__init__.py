@@ -6,6 +6,7 @@ from ..bot import messenger_bot
 from ...database import db
 from ...database.models.User import User
 from ...database.models.Setting import Setting
+from ...database.models.Message import Message
 
 GRADES = []
 CRONJOB_API_KEY = getenv("CRONJOB_API_KEY")
@@ -37,6 +38,9 @@ def message():
 		users = User.query.filter(User.grade.in_(grades)).all()
 		for user in users:
 			messenger_bot.send_text_message(user.id, message)
+			Message.query.filter_by(name="sent").first().value += 1
+		
+		db.session.commit()
 
 		return render_template("message.html", grades=GRADES)
 
@@ -104,6 +108,8 @@ def delete_user():
 
 	user = User.query.filter_by(id=id).first()
 	if not user: return redirect(url_for("dashboard.users"))
+
+	Message.query.filter_by(name="sent").first().value += 1
 
 	db.session.delete(user)
 	db.session.commit()
