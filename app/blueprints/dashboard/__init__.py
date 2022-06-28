@@ -40,15 +40,34 @@ def message():
 
 		return render_template("message.html", grades=GRADES)
 
-@dashboard.route("/data")
+@dashboard.route("/data", methods=["GET", "POST"])
 @requires_auth
 def data():
-	substitutions_url = Setting.query.filter_by(name="substitutions_url").first().value
-	dates_url = Setting.query.filter_by(name="dates_url").first().value
-	metadata_url = Setting.query.filter_by(name="metadata_url").first().value
-	grades = Setting.query.filter_by(name="grades").first().value.split(",")
-	hours = Setting.query.filter_by(name="hours").first().value.split(",")
-	return render_template("data.html", substitutions_url=substitutions_url, dates_url=dates_url, metadata_url=metadata_url, grades=grades, hours=hours)
+	if request.method == "GET":
+		substitutions_url = Setting.query.filter_by(name="substitutions_url").first().value
+		dates_url = Setting.query.filter_by(name="dates_url").first().value
+		metadata_url = Setting.query.filter_by(name="metadata_url").first().value
+		grades = Setting.query.filter_by(name="grades").first().value.split(",")
+		hours = Setting.query.filter_by(name="hours").first().value.split(",")
+		return render_template("data.html", substitutions_url=substitutions_url, dates_url=dates_url, metadata_url=metadata_url, grades=grades, hours=hours)
+	else:
+		substitutions_url = request.form.get("substitutions_url")
+		dates_url = request.form.get("dates_url")
+		metadata_url = request.form.get("metadata_url")
+		grades = request.form.get("grades")
+		hours = request.form.get("hours")
+
+		if not all(substitutions_url, dates_url, metadata_url, grades, hours): return render_template("data.html", substitutions_url=substitutions_url, dates_url=dates_url, metadata_url=metadata_url, grades=grades.split(","), hours=hours.split(","))
+
+		Setting.query.filter_by(name="substitutions_url").first().value = substitutions_url
+		Setting.query.filter_by(name="dates_url").first().value = dates_url
+		Setting.query.filter_by(name="metadata_url").first().value = metadata_url
+		Setting.query.filter_by(name="grades").first().value = grades
+		Setting.query.filter_by(name="hours").first().value = hours
+
+		db.session.commit()
+
+		return render_template("data.html", substitutions_url=substitutions_url, dates_url=dates_url, metadata_url=metadata_url, grades=grades.split(","), hours=hours.split(","))
 
 @dashboard.route("/cron", methods=["GET", "POST"])
 @requires_auth
