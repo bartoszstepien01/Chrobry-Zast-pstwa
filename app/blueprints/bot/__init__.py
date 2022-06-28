@@ -10,7 +10,6 @@ from ...database import db
 from ...database.models.User import User
 from ...database.models.Date import Date
 from ...database.models.Setting import Setting
-from ... import app
 
 ACCESS_TOKEN = getenv("ACCESS_TOKEN")
 VERIFY_TOKEN = getenv("VERIFY_TOKEN")
