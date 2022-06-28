@@ -7,7 +7,7 @@ from ...database import db
 from ...database.models.User import User
 from ...database.models.Setting import Setting
 
-GRADES = getenv("GRADES").split(",")
+GRADES = []
 CRONJOB_API_KEY = getenv("CRONJOB_API_KEY")
 CRONJOB_JOB_ID = getenv("CRONJOB_JOB_ID")
 
@@ -26,6 +26,7 @@ def users():
 @dashboard.route("/message", methods=["GET", "POST"])
 @requires_auth
 def message():
+	GRADES = Setting.query.filter_by(name="grades").first().value.split(",")
 	if request.method == "GET":
 		return render_template("message.html", grades=GRADES)
 	else:
