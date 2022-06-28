@@ -10,25 +10,19 @@ from ...database import db
 from ...database.models.User import User
 from ...database.models.Date import Date
 from ...database.models.Setting import Setting
+from ... import app
 
 ACCESS_TOKEN = getenv("ACCESS_TOKEN")
 VERIFY_TOKEN = getenv("VERIFY_TOKEN")
 CHECK_TOKEN = getenv("CHECK_TOKEN")
-GRADES = Setting.query.filter_by(name="grades").first().value.split(",")
+GRADES = ""
 
 bot = Blueprint("bot", __name__)
 messenger_bot = Bot(ACCESS_TOKEN)
 
-Substitutions.URL = Setting.query.filter_by(name="substitutions_url").first().value
-SubstitutionsDates.DATES_URL = Setting.query.filter_by(name="dates_url").first().value
-SubstitutionsParser.HOURS = Setting.query.filter_by(name="hours").first().value.split(",")
-SubstitutionsParser.METADATA_URL = Setting.query.filter_by(name="metadata_url").first().value
-
 substitutions = Substitutions()
 dates = SubstitutionsDates()
 parser = SubstitutionsParser()
-
-parser.update_metadata()
 
 @bot.route("/webhook", methods=["GET", "POST"])
 def webhook():
@@ -94,6 +88,8 @@ def check():
 	last_date = Date.query.first()
 
 	if last_date.date == date and last_date.current_substitutions == temp2: return "Nihil novi"
+
+	parser.update_metadata()
 
 	update = date == last_date.date
 	subs = {}
