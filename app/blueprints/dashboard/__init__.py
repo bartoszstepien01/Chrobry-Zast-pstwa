@@ -99,7 +99,10 @@ def stats():
 		users_count[user.grade] += 1
 		users_count["all"] += 1
 
-	return render_template("stats.html", grades=grades, users_count=users_count)
+	sent_messages = Message.query.filter_by(name="sent").first().value
+	received_messages = Message.query.filter_by(name="received").first().value
+
+	return render_template("stats.html", grades=grades, users_count=users_count, sent_messages=sent_messages, received_messages=received_messages)
 
 @dashboard.route("/delete_user")
 def delete_user():
