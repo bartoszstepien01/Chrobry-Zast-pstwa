@@ -18,7 +18,9 @@
 			<label for="meta-url">Adres URL metadanych</label>
 		</div>
 		<div class="chips grades"></div>
+		<input type="hidden" name="grades" id="grades">
 		<div class="chips hours"></div>
+		<input type="hidden" name="hours" id="hours">
 		<button type="submit" class="waves-effect waves-light btn"><i class="material-icons left">check</i>Zastosuj</button>
 	</form>
 
@@ -34,7 +36,15 @@
 							tag: "{{ grade }}"
 						},
 					{% endfor %}
-				]
+				],
+				onChipAdd: () => {
+					let grades = document.querySelector("#grades");
+					grades.value = M.Chips.getInstance(document.querySelector(".grades")).getData().map(chip => chip.tag).join(",");
+				},
+				onChipDelete: () => {
+					let grades = document.querySelector("#grades");
+					grades.value = M.Chips.getInstance(document.querySelector(".grades")).getData().map(chip => chip.tag).join(",");
+				}
 			});
 
 			elems = document.querySelectorAll('.hours');
@@ -47,7 +57,15 @@
 							tag: "{{ hour }}"
 						},
 					{% endfor %}
-				]
+				],
+				onChipAdd: () => {
+					let hours = document.querySelector("#hours");
+					hours.value = M.Chips.getInstance(document.querySelector(".hours")).getData().map(chip => chip.tag).join(",");
+				},
+				onChipDelete: () => {
+					let hours = document.querySelector("#hours");
+					hours.value = M.Chips.getInstance(document.querySelector(".hours")).getData().map(chip => chip.tag).join(",");
+				}
 			});
 		});
 	</script>
