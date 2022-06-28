@@ -1,8 +1,6 @@
 import requests
 import datetime
 from bs4 import BeautifulSoup
-import os
-
 
 class Substitution(object):
     def __init__(self, array: []) -> None:
@@ -17,7 +15,7 @@ class Substitution(object):
 
 
 class Substitutions(object):
-    URL = os.getenv("SUBSTITUTIONS_URL")
+    URL = ""
 
     def get_substitutions_for_grade(self, date: datetime.date, grade: str, substitutions: dict = None) -> list:
         if not substitutions: substitutions = self.get_substitutions(date)

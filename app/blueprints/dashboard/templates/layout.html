@@ -33,11 +33,11 @@
 			<a<span class="white-text name">Chrobry Zastępstwa</span></a>
 			<a><span class="white-text email">Panel administracyjny</span></a>
 			</div></li>
-			<li {% if url_for(request.endpoint) == "/dashboard/users" %}class="active"{% endif %}><a class="waves-effect" href="users"><i class="material-icons">people</i>Użytkownicy</a></li>
-			<li {% if url_for(request.endpoint) == "/dashboard/message" %}class="active"{% endif %}><a class="waves-effect" href="message"><i class="material-icons">message</i>Wysyłanie wiadomości</a></li>
-			<li {% if url_for(request.endpoint) == "/dashboard/data" %}class="active"{% endif %}><a class="waves-effect" href="data"><i class="material-icons">folder</i>Źródła danych</a></li>
-			<li {% if url_for(request.endpoint) == "/dashboard/cron" %}class="active"{% endif %}><a class="waves-effect" href="cron"><i class="material-icons">schedule</i>Pobieranie zastępstw</a></li>
-			<li {% if url_for(request.endpoint) == "/dashboard/stats" %}class="active"{% endif %}><a class="waves-effect" href="stats"><i class="material-icons">show_chart</i>Statystyki</a></li>
+			<li {% if request.endpoint == "dashboard.users" %}class="active"{% endif %}><a class="waves-effect" href="users"><i class="material-icons">people</i>Użytkownicy</a></li>
+			<li {% if request.endpoint == "dashboard.message" %}class="active"{% endif %}><a class="waves-effect" href="message"><i class="material-icons">message</i>Wysyłanie wiadomości</a></li>
+			<li {% if request.endpoint == "dashboard.data" %}class="active"{% endif %}><a class="waves-effect" href="data"><i class="material-icons">folder</i>Źródła danych</a></li>
+			<li {% if request.endpoint == "dashboard.cron" %}class="active"{% endif %}><a class="waves-effect" href="cron"><i class="material-icons">schedule</i>Pobieranie zastępstw</a></li>
+			<li {% if request.endpoint == "dashboard.stats" %}class="active"{% endif %}><a class="waves-effect" href="stats"><i class="material-icons">show_chart</i>Statystyki</a></li>
 		</ul>
 	</header>
 
@@ -75,38 +75,6 @@
 
 			elems = document.querySelectorAll('select');
     		instances = M.FormSelect.init(elems);
-
-			elems = document.querySelectorAll('.grades');
-    		instances = M.Chips.init(elems, {
-				placeholder: "Klasy",
-				secondaryPlaceholder: "\0",
-				data: [{
-					tag: '1a'
-				},
-				{
-					tag: '1b'
-				},
-				{
-					tag: '1c'
-				},
-				]
-			});
-
-			elems = document.querySelectorAll('.hours');
-    		instances = M.Chips.init(elems, {
-				placeholder: "Godziny",
-				secondaryPlaceholder: "\0",
-				data: [{
-					tag: '7:10-7:55'
-				},
-				{
-					tag: '8:00-8:45'
-				},
-				{
-					tag: '8:55-9:40'
-				},
-				]
-			});
 		});
 	</script>
 </body>

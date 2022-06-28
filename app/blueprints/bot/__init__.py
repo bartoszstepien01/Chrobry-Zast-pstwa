@@ -9,14 +9,20 @@ from .substitutions.substitutionsparser import SubstitutionsParser
 from ...database import db
 from ...database.models.User import User
 from ...database.models.Date import Date
+from ...database.models.Setting import Setting
 
 ACCESS_TOKEN = getenv("ACCESS_TOKEN")
 VERIFY_TOKEN = getenv("VERIFY_TOKEN")
 CHECK_TOKEN = getenv("CHECK_TOKEN")
-GRADES = getenv("GRADES").split(",")
+GRADES = Setting.query.filter_by(name="grades").first().value.split(",")
 
 bot = Blueprint("bot", __name__)
 messenger_bot = Bot(ACCESS_TOKEN)
+
+Substitutions.URL = Setting.query.filter_by(name="substitutions_url").first().value
+SubstitutionsDates.DATES_URL = Setting.query.filter_by(name="dates_url").first().value
+SubstitutionsParser.HOURS = Setting.query.filter_by(name="hours").first().value.split(",")
+SubstitutionsParser.METADATA_URL = Setting.query.filter_by(name="metadata_url").first().value
 
 substitutions = Substitutions()
 dates = SubstitutionsDates()
@@ -43,6 +49,8 @@ def webhook():
 
 					user = User.query.filter_by(id=recipient_id).first()
 
+					GRADES = Setting.query.filter_by(name="grades").first().value.split(",")
+
 					if text in GRADES:
 						if user:
 							user.grade = text
@@ -68,6 +76,12 @@ def webhook():
 @bot.route("/check")
 def check():
 	if request.headers.get("Token") != CHECK_TOKEN: return "Invalid verification token"
+
+	GRADES = Setting.query.filter_by(name="grades").first().value.split(",")
+	Substitutions.URL = Setting.query.filter_by(name="substitutions_url").first().value
+	SubstitutionsDates.DATES_URL = Setting.query.filter_by(name="dates_url").first().value
+	SubstitutionsParser.HOURS = Setting.query.filter_by(name="hours").first().value.split(",")
+	SubstitutionsParser.METADATA_URL = Setting.query.filter_by(name="metadata_url").first().value
 
 	date = dates.download_dates()[0]
 	temp = substitutions.get_substitutions(date)

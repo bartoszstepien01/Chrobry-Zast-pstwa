@@ -6,19 +6,49 @@
 	<h3>Źródła danych</h3>
 	<form method="post" style="margin-top: 40px;">
 		<div class="input-field">
-			<input id="subs-url" type="text" name="substitutions_url" value="http://www.chrobry1lo.nazwa.pl/chrobry/zastepstwa202109/">
+			<input id="subs-url" type="text" name="substitutions_url" value="{{ substitutions_url }}">
 			<label for="subs-url">Adres URL zastępstw</label>
 		</div>
 		<div class="input-field">
-			<input id="dates-url" type="text" name="dates_url" value="http://www.chrobry1lo.nazwa.pl/chrobry/zastepstwa202109/subst_left.htm">
+			<input id="dates-url" type="text" name="dates_url" value="{{ dates_url }}">
 			<label for="dates-url">Adres URL dat</label>
 		</div>
 		<div class="input-field">
-			<input id="meta-url" type="text" name="metadata_url" value="http://www.chrobry1lo.nazwa.pl/chrobry/plan092020/timetable.xml">
+			<input id="meta-url" type="text" name="metadata_url" value="{{ metadata_url }}">
 			<label for="meta-url">Adres URL metadanych</label>
 		</div>
 		<div class="chips grades"></div>
 		<div class="chips hours"></div>
 		<button type="submit" class="waves-effect waves-light btn"><i class="material-icons left">check</i>Zastosuj</button>
 	</form>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			let elems = document.querySelectorAll('.grades');
+    		instances = M.Chips.init(elems, {
+				placeholder: "Klasy",
+				secondaryPlaceholder: "\0",
+				data: [
+					{% for grade in grades %}
+						{
+							tag: "{{ grade }}"
+						},
+					{% endfor %}
+				]
+			});
+
+			elems = document.querySelectorAll('.hours');
+    		instances = M.Chips.init(elems, {
+				placeholder: "Godziny",
+				secondaryPlaceholder: "\0",
+				data: [
+					{% for hour in hours %}
+						{
+							tag: "{{ hour }}"
+						},
+					{% endfor %}
+				]
+			});
+		});
+	</script>
 {% endblock %}

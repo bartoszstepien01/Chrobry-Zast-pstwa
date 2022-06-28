@@ -1,10 +1,9 @@
 import requests
 import datetime
 from bs4 import BeautifulSoup
-import os
 
 class SubstitutionsDates(object):
-    DATES_URL = os.getenv("DATES_URL")
+    DATES_URL = ""
 
     def download_dates(self):
         return self.parse_page(self.download_page())

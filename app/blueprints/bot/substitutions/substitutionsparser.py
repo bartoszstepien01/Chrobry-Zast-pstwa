@@ -2,14 +2,13 @@ import requests
 import xml.etree.ElementTree as ET
 from . import substitutions as sub
 import datetime
-import os
 
 class SubstitutionsParser(object):
-    HOURS = os.getenv("HOURS").split(",")
+    HOURS = ""
 
     WEEKDAYS = ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"]
 
-    METADATA_URL = os.getenv("METADATA_URL")
+    METADATA_URL = ""
 
     SUBJECTS_METADATA = None
 

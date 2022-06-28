@@ -5,6 +5,7 @@ from .auth import requires_auth
 from ..bot import messenger_bot
 from ...database import db
 from ...database.models.User import User
+from ...database.models.Setting import Setting
 
 GRADES = getenv("GRADES").split(",")
 CRONJOB_API_KEY = getenv("CRONJOB_API_KEY")
@@ -41,7 +42,12 @@ def message():
 @dashboard.route("/data")
 @requires_auth
 def data():
-    return render_template("data.html")
+	substitutions_url = Setting.query.filter_by(name="substitutions_url").first().value
+	dates_url = Setting.query.filter_by(name="dates_url").first().value
+	metadata_url = Setting.query.filter_by(name="metadata_url").first().value
+	grades = Setting.query.filter_by(name="grades").first().value.split(",")
+	hours = Setting.query.filter_by(name="hours").first().value.split(",")
+	return render_template("data.html", substitutions_url=substitutions_url, dates_url=dates_url, metadata_url=metadata_url, grades=grades, hours=hours)
 
 @dashboard.route("/cron", methods=["GET", "POST"])
 @requires_auth
