@@ -47,7 +47,7 @@ class Substitutions(object):
             cols = self.parse_row(row)
             if not cols:
                 continue
-            if len(cols) <= 5:
+            if cols[0].isdigit():
                 cols.insert(0, current_grade)
             else:
                 current_grade = cols[0]
