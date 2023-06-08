@@ -105,6 +105,7 @@ def stats():
 	return render_template("stats.html", grades=grades, users_count=users_count, sent_messages=sent_messages, received_messages=received_messages)
 
 @dashboard.route("/delete_user")
+@requires_auth
 def delete_user():
 	id = request.args.get("id")
 	if not id: return redirect(url_for("dashboard.users"))
